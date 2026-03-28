@@ -8,4 +8,11 @@ class Contact extends Model
 {
     protected $fillable = ['first_name', 'last_name', 'company', 'owner_id'];
     protected $table = 'contacts';
+
+    public function emails()
+{
+    return $this->hasMany(Email::class);
 }
+}
+
+
