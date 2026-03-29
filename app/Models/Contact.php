@@ -10,9 +10,7 @@ class Contact extends Model
     protected $table = 'contacts';
 
     public function emails()
-{
-    return $this->hasMany(Email::class);
+    {
+        return $this->hasMany(Email::class);
+    }
 }
-}
-
-

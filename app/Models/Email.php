@@ -13,8 +13,4 @@ class Email extends Model
 
         return $this->belongsTo(Contact::class); //“This contact owns many emails”
     }
-
-    
-
-    
 }
