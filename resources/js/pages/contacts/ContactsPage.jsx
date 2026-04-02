@@ -81,6 +81,9 @@ export default function ContactsPage({ contacts: initialContacts }) {
                                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
                                         Phone
                                     </th>
+                                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                                        Notes
+                                    </th>
                                     <th className="px-6 py-3 text-right text-sm font-semibold text-gray-900">
                                         Actions
                                     </th>
@@ -125,6 +128,34 @@ export default function ContactsPage({ contacts: initialContacts }) {
                                                       ),
                                                   )
                                                 : '—'}
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-gray-600">
+                                            {contact.notes?.map((note) => (
+                                                <div
+                                                    key={note.id}
+                                                    className="mb-2 rounded border p-3"
+                                                >
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="text-sm text-gray-500">
+                                                            {note.type ||
+                                                                'Note'}
+                                                        </span>
+                                                        <button
+                                                            onClick={() =>
+                                                                handleDelete(
+                                                                    note.id,
+                                                                )
+                                                            }
+                                                            className="text-sm text-red-500"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                    <p className="mt-1">
+                                                        {note.content}
+                                                    </p>
+                                                </div>
+                                            ))}
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex justify-end gap-2">
