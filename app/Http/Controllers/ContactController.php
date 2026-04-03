@@ -15,7 +15,7 @@ class ContactController extends Controller
 
     public function index()
     {
-        $contacts = Contact::with('emails', 'phones')->latest()->get();
+        $contacts = Contact::with('emails', 'phones', 'notes')->latest()->get();
         // $contacts = Contact::latest()->get();
         return Inertia::render('contacts/ContactsPage', [
 
@@ -52,13 +52,14 @@ class ContactController extends Controller
 
         // Save multiple phones
         foreach ($validated['phones'] ?? [] as $phoneData) {
-            if (!empty($phoneData['phone'])) {
+            $phone = is_array($phoneData) ? ($phoneData['phone'] ?? null) : $phoneData;
+            if (!empty($phone)) {
                 $contact->phones()->create([
-                    'phone' => $phoneData['phone']
+                    'phone' => $phone
                 ]);
             }
         }
-        
+
         return redirect('/contacts');
     }
 

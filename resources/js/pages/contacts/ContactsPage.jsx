@@ -1,11 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { router } from '@inertiajs/react';
 import ContactFormModal from '../../components/ContactFormModal';
-export default function ContactsPage({ contacts: initialContacts }) {
-    const [contacts, setContacts] = useState(initialContacts);
+import NotesModal from '../../components/NotesModal';
+export default function ContactsPage({ contacts }) {
+    
+    const [notesModalOpen, setNotesModalOpen] = useState(false);
+    const [selectedContactForNotes, setSelectedContactForNotes] = useState(null);
     const [createModalOpen, setCreateModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [selectedContact, setSelectedContact] = useState(null);
+
+    useEffect(() => {
+    if (!selectedContactForNotes) return;
+
+    const updated = contacts.find(
+        (c) => c.id === selectedContactForNotes.id
+    );
+
+    if (updated) {
+        setSelectedContactForNotes(updated);
+    }
+}, [contacts]);
 
     const handleOpenCreateModal = () => {
         setSelectedContact(null);
@@ -24,10 +39,6 @@ export default function ContactsPage({ contacts: initialContacts }) {
     const handleCloseEditModal = () => {
         setEditModalOpen(false);
         setSelectedContact(null);
-    };
-
-    const handleSuccess = () => {
-        window.location.reload();
     };
 
     const handleDelete = (contact) => {
@@ -130,32 +141,17 @@ export default function ContactsPage({ contacts: initialContacts }) {
                                                 : '—'}
                                         </td>
                                         <td className="px-6 py-4 text-sm text-gray-600">
-                                            {contact.notes?.map((note) => (
-                                                <div
-                                                    key={note.id}
-                                                    className="mb-2 rounded border p-3"
-                                                >
-                                                    <div className="flex items-center justify-between">
-                                                        <span className="text-sm text-gray-500">
-                                                            {note.type ||
-                                                                'Note'}
-                                                        </span>
-                                                        <button
-                                                            onClick={() =>
-                                                                handleDelete(
-                                                                    note.id,
-                                                                )
-                                                            }
-                                                            className="text-sm text-red-500"
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </div>
-                                                    <p className="mt-1">
-                                                        {note.content}
-                                                    </p>
-                                                </div>
-                                            ))}
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedContactForNotes(
+                                                        contact,
+                                                    );
+                                                    setNotesModalOpen(true);
+                                                }}
+                                                className="rounded-md bg-green-50 px-3 py-2 text-sm text-green-600 hover:bg-green-100"
+                                            >
+                                                Notes
+                                            </button>
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex justify-end gap-2">
@@ -203,7 +199,6 @@ export default function ContactsPage({ contacts: initialContacts }) {
                     isOpen={createModalOpen}
                     onClose={handleCloseCreateModal}
                     mode="create"
-                    onSuccess={handleSuccess}
                 />
 
                 {/* Edit Modal */}
@@ -212,7 +207,13 @@ export default function ContactsPage({ contacts: initialContacts }) {
                     onClose={handleCloseEditModal}
                     contact={selectedContact}
                     mode="edit"
-                    onSuccess={handleSuccess}
+                />
+
+                {/* Notes Modal */}
+                <NotesModal
+                    isOpen={notesModalOpen}
+                    onClose={() => setNotesModalOpen(false)}
+                    contact={selectedContactForNotes}
                 />
             </div>
         </div>

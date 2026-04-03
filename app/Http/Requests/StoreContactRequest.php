@@ -22,7 +22,8 @@ class StoreContactRequest extends FormRequest
             'company' => ['nullable', 'string', 'max:255'],
             'emails' => ['array'],
             'emails.*.email' => ['nullable', 'email', 'max:255'],
-            
+            'phones' => ['nullable', 'array'],
+            'phones.*.phone' => ['nullable', 'string'],
         ];
     }
 
