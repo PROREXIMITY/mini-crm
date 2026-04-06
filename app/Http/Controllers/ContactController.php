@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Contact;
 use App\Models\Email;
-use Illuminate\Support\Facades\Auth; //Fixes IDE warnings
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreContactRequest;
+use App\Http\Requests\UpdateContactRequest;
 
 class ContactController extends Controller
 {
@@ -14,9 +15,9 @@ class ContactController extends Controller
 
     public function index()
     {
-        $contacts = Contact::with('emails')->latest()->get();
+        $contacts = Contact::with('emails', 'phones', 'notes')->latest()->get();
         // $contacts = Contact::latest()->get();
-        return Inertia::render('contacts/index', [
+        return Inertia::render('contacts/ContactsPage', [
 
             'contacts' => $contacts,
         ]);
@@ -29,15 +30,9 @@ class ContactController extends Controller
         return Inertia::render('contacts/create');
     }
 
-    public function store(Request $request)
+    public function store(StoreContactRequest $request)
     {
-        $validated = $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'company' => 'nullable',
-            'emails' => 'array',
-            'emails.*.email' => 'nullable|email',
-        ]);
+        $validated = $request->validated();
 
         $contact = Contact::create([
             'first_name' => $validated['first_name'],
@@ -55,27 +50,31 @@ class ContactController extends Controller
             }
         }
 
+        // Save multiple phones
+        foreach ($validated['phones'] ?? [] as $phoneData) {
+            $phone = is_array($phoneData) ? ($phoneData['phone'] ?? null) : $phoneData;
+            if (!empty($phone)) {
+                $contact->phones()->create([
+                    'phone' => $phone
+                ]);
+            }
+        }
+
         return redirect('/contacts');
     }
 
     public function edit(Contact $contact)
     {
-        $contact->load('emails');
+        $contact->load('emails', 'phones');
 
         return Inertia::render('contacts/edit', [
             'contact' => $contact
         ]);
     }
 
-    public function update(Request $request, Contact $contact)
+    public function update(UpdateContactRequest $request, Contact $contact)
     {
-        $validated = $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'company' => 'nullable',
-            'emails' => 'array',
-            'emails.*.email' => 'nullable|email',
-        ]);
+        $validated = $request->validated();
 
         // Update contact
         $contact->update([
@@ -94,12 +93,29 @@ class ContactController extends Controller
             ->whereNotIn('id', $incomingIds)
             ->delete();
 
-        // 🔥 STEP C: Update or create emails
+        // STEP C: Update or create emails
         foreach ($validated['emails'] as $emailData) {
             if (!empty($emailData['email'])) {
                 $contact->emails()->updateOrCreate(
                     ['id' => $emailData['id'] ?? null],
                     ['email' => $emailData['email']]
+                );
+            }
+        }
+
+        $incomingPhoneIds = collect($validated['phones'])
+            ->pluck('id')
+            ->filter();
+
+        $contact->phones()
+            ->whereNotIn('id', $incomingPhoneIds)
+            ->delete();
+
+        foreach ($validated['phones'] as $phoneData) {
+            if (!empty($phoneData['phone'])) {
+                $contact->phones()->updateOrCreate(
+                    ['id' => $phoneData['id'] ?? null],
+                    ['phone' => $phoneData['phone']]
                 );
             }
         }

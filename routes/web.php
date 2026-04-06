@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\NoteController;
 
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
@@ -18,6 +19,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/contacts/{contact}/edit', [ContactController::class, 'edit']);
     Route::put('/contacts/{contact}', [ContactController::class, 'update']);
     Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
+
+    Route::post('/contacts/{contact}/notes', [NoteController::class, 'store']);
+    Route::delete('/notes/{note}', [NoteController::class, 'destroy']);
 });
 
 

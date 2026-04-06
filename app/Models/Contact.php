@@ -13,4 +13,14 @@ class Contact extends Model
     {
         return $this->hasMany(Email::class);
     }
+
+    public function phones()
+    {
+        return $this->hasMany(Phone::class);
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
+    }
 }
