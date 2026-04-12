@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\ActivityController;
 
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
@@ -22,6 +23,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/contacts/{contact}/notes', [NoteController::class, 'store']);
     Route::delete('/notes/{note}', [NoteController::class, 'destroy']);
+
+    // Activity Timeline API Routes
+    Route::get('/contacts/{contact}/activities', [ActivityController::class, 'index']);
+    Route::post('/contacts/{contact}/activities', [ActivityController::class, 'store']);
+    Route::delete('/activities/{activity}', [ActivityController::class, 'destroy']);
 });
 
 

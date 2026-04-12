@@ -15,7 +15,7 @@ class ContactController extends Controller
 
     public function index()
     {
-        $contacts = Contact::with('emails', 'phones', 'notes')->latest()->get();
+        $contacts = Contact::with('emails', 'phones', 'activities')->latest()->get();
         // $contacts = Contact::latest()->get();
         return Inertia::render('contacts/ContactsPage', [
 

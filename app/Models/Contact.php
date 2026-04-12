@@ -23,4 +23,9 @@ class Contact extends Model
     {
         return $this->hasMany(Note::class);
     }
+
+    public function activities()
+    {
+        return $this->hasMany(Activity::class)->orderByDesc('created_at');
+    }
 }

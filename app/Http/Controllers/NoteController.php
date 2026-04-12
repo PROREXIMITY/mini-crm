@@ -11,8 +11,8 @@ class NoteController extends Controller
 {
     public function store(StoreNoteRequest $request, Contact $contact)
     {
-        $contact->notes()->create([
-            'type' => $request->type,
+        $contact->activities()->create([
+            'type' => $request->type ?? 'note',
             'content' => $request->content,
             'user_id' => $request->user()->id,
         ]);

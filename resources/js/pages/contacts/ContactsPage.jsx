@@ -1,26 +1,26 @@
 import { useState, useEffect } from 'react';
 import { router } from '@inertiajs/react';
 import ContactFormModal from '../../components/ContactFormModal';
-import NotesModal from '../../components/NotesModal';
+import ActivityModal from '../../components/ActivityModal';
 export default function ContactsPage({ contacts }) {
-    
-    const [notesModalOpen, setNotesModalOpen] = useState(false);
-    const [selectedContactForNotes, setSelectedContactForNotes] = useState(null);
+    const [activityModalOpen, setActivityModalOpen] = useState(false);
+    const [selectedContactForActivity, setSelectedContactForActivity] =
+        useState(null);
     const [createModalOpen, setCreateModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [selectedContact, setSelectedContact] = useState(null);
 
     useEffect(() => {
-    if (!selectedContactForNotes) return;
+        if (!selectedContactForActivity) return;
 
-    const updated = contacts.find(
-        (c) => c.id === selectedContactForNotes.id
-    );
+        const updated = contacts.find(
+            (c) => c.id === selectedContactForActivity.id,
+        );
 
-    if (updated) {
-        setSelectedContactForNotes(updated);
-    }
-}, [contacts]);
+        if (updated) {
+            setSelectedContactForActivity(updated);
+        }
+    }, [contacts]);
 
     const handleOpenCreateModal = () => {
         setSelectedContact(null);
@@ -143,14 +143,14 @@ export default function ContactsPage({ contacts }) {
                                         <td className="px-6 py-4 text-sm text-gray-600">
                                             <button
                                                 onClick={() => {
-                                                    setSelectedContactForNotes(
+                                                    setSelectedContactForActivity(
                                                         contact,
                                                     );
-                                                    setNotesModalOpen(true);
+                                                    setActivityModalOpen(true);
                                                 }}
                                                 className="rounded-md bg-green-50 px-3 py-2 text-sm text-green-600 hover:bg-green-100"
                                             >
-                                                Notes
+                                                Activity
                                             </button>
                                         </td>
                                         <td className="px-6 py-4 text-right">
@@ -210,10 +210,10 @@ export default function ContactsPage({ contacts }) {
                 />
 
                 {/* Notes Modal */}
-                <NotesModal
-                    isOpen={notesModalOpen}
-                    onClose={() => setNotesModalOpen(false)}
-                    contact={selectedContactForNotes}
+                <ActivityModal
+                    isOpen={activityModalOpen}
+                    onClose={() => setActivityModalOpen(false)}
+                    contact={selectedContactForActivity}
                 />
             </div>
         </div>
