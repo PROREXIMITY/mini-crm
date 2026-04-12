@@ -38,7 +38,7 @@ class ContactController extends Controller
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
             'company' => $validated['company'] ?? null,
-            'owner_id' => $request->user()->id
+            'user_id' => $request->user()->id,
         ]);
 
         // Save multiple emails

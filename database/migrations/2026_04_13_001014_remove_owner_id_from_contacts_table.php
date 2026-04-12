@@ -12,22 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('contacts', function (Blueprint $table) {
-            $table->foreignId('user_id')
-                ->nullable()
-                ->after('id') // optional but clean
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->dropForeign(['owner_id']); // 👈 IMPORTANT FIRST
+            $table->dropColumn('owner_id');    // then drop column
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('contacts', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropColumn('user_id');
+            $table->foreignId('owner_id')->constrained()->onDelete('cascade');
         });
     }
 };

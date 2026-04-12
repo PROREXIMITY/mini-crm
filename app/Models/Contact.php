@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
-    protected $fillable = ['first_name', 'last_name', 'company', 'owner_id'];
+    protected $fillable = ['user_id', 'first_name', 'last_name', 'company'];
     protected $table = 'contacts';
 
     public function emails()
@@ -27,5 +27,10 @@ class Contact extends Model
     public function activities()
     {
         return $this->hasMany(Activity::class)->orderByDesc('created_at');
+    }
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
