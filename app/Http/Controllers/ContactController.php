@@ -17,17 +17,9 @@ class ContactController extends Controller
     {
         $contacts = Contact::with('emails', 'phones', 'activities')->latest()->get();
         // $contacts = Contact::latest()->get();
-        return Inertia::render('contacts/ContactsPage', [
-
+        return inertia('contacts/ContactsPage', [
             'contacts' => $contacts,
         ]);
-    }
-
-
-
-    public function create()
-    {
-        return Inertia::render('contacts/create');
     }
 
     public function store(StoreContactRequest $request)
@@ -61,15 +53,6 @@ class ContactController extends Controller
         }
 
         return redirect('/contacts');
-    }
-
-    public function edit(Contact $contact)
-    {
-        $contact->load('emails', 'phones');
-
-        return Inertia::render('contacts/edit', [
-            'contact' => $contact
-        ]);
     }
 
     public function update(UpdateContactRequest $request, Contact $contact)

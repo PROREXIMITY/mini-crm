@@ -33,12 +33,12 @@ const footerNavItems = [
     },
     {
     title: 'Contacts',
-    url: '/contacts',
+    href: '/contacts',
     icon: Users, 
 },
 {
     title: 'Add Contact',
-    url: '/contacts/create',
+    href: '/contacts/create',
     icon: UserPlus,
 },
 ];
@@ -47,17 +47,17 @@ export function AppSidebar() {
     const mainNavItems = [
 {
         title: 'Dashboard',
-        url: route('dashboard'),
+        href: '/dashboard',
         icon: LayoutDashboard,
     },
     {
         title: 'Contacts',
-        url: route('contacts.index'), 
+        href: '/contacts',
         icon: Users,
     },
     {
         title: 'Add Contact',
-        url: route('contacts.create'),
+        href: '/contacts/create',
         icon: UserPlus,
     },
 ];
@@ -69,7 +69,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href="/dashboard" prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

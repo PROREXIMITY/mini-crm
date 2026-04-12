@@ -17,7 +17,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
 
     //Edit and Delete routes for contacts
-    Route::get('/contacts/{contact}/edit', [ContactController::class, 'edit']);
     Route::put('/contacts/{contact}', [ContactController::class, 'update']);
     Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
 
