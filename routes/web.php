@@ -5,13 +5,26 @@ use Laravel\Fortify\Features;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ActivityController;
+use App\Models\Contact;
+use App\Models\Email;
+use App\Models\Activity;
 
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
 ])->name('home');
 
+Route::get('/dashboard', function () {
+    return inertia('dashboard', [
+        'stats' => [
+            'totalContacts' => Contact::count(),
+            'totalEmails' => Email::count(),
+            'totalCalls' => Activity::where('type', 'call')->count(),
+            'totalMeetings' => Activity::where('type', 'meeting')->count(),
+        ],
+    ]);
+})->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
     Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
     Route::get('/contacts/create', [ContactController::class, 'create'])->name('contacts.create');
     Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
