@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useForm, router } from '@inertiajs/react';
 import Modal from './Modal';
 import ActivityTimeline from './ActivityTimeline';
+import ActivitySummary from './ActivitySummary';
+import ActivityFilters from './ActivityFilters';
 
 const ACTIVITY_TYPES = [
     { value: 'note', label: '📝 Note', icon: '📝' },
@@ -29,6 +31,7 @@ export default function ActivityModal({
 
     const [localActivities, setLocalActivities] = useState(activities);
     const [isLoadingActivities, setIsLoadingActivities] = useState(false);
+    const [filter, setFilter] = useState('all');
 
     // Update activities when modal opens or contact changes
     useEffect(() => {
@@ -49,6 +52,25 @@ export default function ActivityModal({
         } finally {
             setIsLoadingActivities(false);
         }
+    };
+
+    /**
+     * Get filtered activities while maintaining grouped structure
+     * Critical: Do NOT convert to array, keep grouped object
+     */
+    const getFilteredActivities = () => {
+        if (filter === 'all') {
+            return localActivities;
+        }
+
+        const filtered = {};
+        Object.entries(localActivities).forEach(([dateGroup, activities]) => {
+            const filteredItems = activities.filter((a) => a.type === filter);
+            if (filteredItems.length > 0) {
+                filtered[dateGroup] = filteredItems;
+            }
+        });
+        return filtered;
     };
 
     // Submit a new activity
@@ -119,6 +141,8 @@ export default function ActivityModal({
         });
     };
 
+    const filteredActivities = getFilteredActivities();
+
     return (
         <Modal
             isOpen={isOpen}
@@ -131,11 +155,16 @@ export default function ActivityModal({
                 {/* Add Activity Form */}
                 <form
                     onSubmit={submitActivity}
-                    className="space-y-4 rounded-lg border border-gray-200 bg-gray-50 p-4"
+                    className="space-y-4 rounded-lg border border-gray-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-5"
                 >
-                    <h3 className="font-semibold text-gray-900">
-                        Add Activity
-                    </h3>
+                    <div className="flex items-center justify-between">
+                        <h3 className="font-semibold text-gray-900">
+                            Add Activity
+                        </h3>
+                        <span className="text-xs font-medium text-blue-600">
+                            {contact?.first_name} {contact?.last_name}
+                        </span>
+                    </div>
 
                     {/* Activity Type Selector */}
                     <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -209,19 +238,35 @@ export default function ActivityModal({
                                 Saving...
                             </span>
                         ) : (
-                            'Add Activity'
+                            `Add ${data.type.charAt(0).toUpperCase() + data.type.slice(1)}`
                         )}
                     </button>
                 </form>
 
-                {/* Activities Timeline */}
-                <div>
-                    <h3 className="mb-4 font-semibold text-gray-900">
+                {/* Activity Summary */}
+                {Object.keys(localActivities).length > 0 && (
+                    <ActivitySummary activities={localActivities} />
+                )}
+
+                {/* Activity Filters */}
+                <div className="flex flex-col gap-3">
+                    <h3 className="text-sm font-semibold text-gray-700">
+                        Filter
+                    </h3>
+                    <ActivityFilters
+                        activeFilter={filter}
+                        onFilterChange={setFilter}
+                    />
+                </div>
+
+                {/* Timeline */}
+                <div className="space-y-3">
+                    <h3 className="text-sm font-semibold text-gray-700">
                         Timeline
                     </h3>
-                    <div className="max-h-96 overflow-y-auto">
+                    <div className="max-h-96 overflow-y-auto rounded-lg border border-gray-200 bg-gray-50 p-6">
                         <ActivityTimeline
-                            activities={localActivities}
+                            activities={filteredActivities}
                             isLoading={isLoadingActivities}
                             onDelete={handleDeleteActivity}
                         />
