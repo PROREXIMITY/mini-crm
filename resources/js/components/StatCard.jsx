@@ -2,8 +2,9 @@
  * StatCard Component
  *
  * Clean SaaS-style stat card for dashboard
+ * Accepts Phosphor icon components
  */
-export default function StatCard({ icon, label, value, trend, color = 'indigo' }) {
+export default function StatCard({ icon: Icon, label, value, trend, color = 'indigo' }) {
     const colorClasses = {
         indigo: 'bg-indigo-50 text-indigo-600 border-indigo-200',
         green: 'bg-green-50 text-green-600 border-green-200',
@@ -26,7 +27,11 @@ export default function StatCard({ icon, label, value, trend, color = 'indigo' }
                         <p className="mt-2 text-xs text-gray-500">{trend}</p>
                     )}
                 </div>
-                <div className="text-3xl">{icon}</div>
+                {Icon && (
+                    <div className="text-right">
+                        <Icon size={32} weight="duotone" />
+                    </div>
+                )}
             </div>
         </div>
     );

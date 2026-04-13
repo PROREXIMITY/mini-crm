@@ -15,8 +15,24 @@ class ContactController extends Controller
 
     public function index()
     {
-        $contacts = Contact::with('emails', 'phones', 'activities')->latest()->get();
-        // $contacts = Contact::latest()->get();
+        $contacts = Contact::with('emails', 'phones', 'activities')
+            ->orderByDesc('is_favorite')
+            ->latest()
+            ->get()
+            ->map(function ($contact) {
+                return [
+                    'id' => $contact->id,
+                    'first_name' => $contact->first_name,
+                    'last_name' => $contact->last_name,
+                    'company' => $contact->company,
+                    'is_favorite' => (bool) $contact->is_favorite,
+                    'emails' => $contact->emails,
+                    'phones' => $contact->phones,
+                    'activities' => $contact->activities,
+                    'created_at' => $contact->created_at,
+                    'updated_at' => $contact->updated_at,
+                ];
+            });
         return inertia('contacts/ContactsPage', [
             'contacts' => $contacts,
         ]);
@@ -111,5 +127,14 @@ class ContactController extends Controller
         $contact->delete();
 
         return redirect('/contacts');
+    }
+
+    public function toggleFavorite(Contact $contact)
+    {
+        $contact->update([
+            'is_favorite' => !$contact->is_favorite,
+        ]);
+
+        return back();
     }
 }

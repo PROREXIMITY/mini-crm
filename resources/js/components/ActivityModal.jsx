@@ -1,15 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useForm, router } from '@inertiajs/react';
+import {
+    FileText,
+    Phone,
+    EnvelopeOpen,
+    CalendarBlank,
+} from '@phosphor-icons/react';
 import Modal from './Modal';
 import ActivityTimeline from './ActivityTimeline';
 import ActivitySummary from './ActivitySummary';
 import ActivityFilters from './ActivityFilters';
 
 const ACTIVITY_TYPES = [
-    { value: 'note', label: '📝 Note', icon: '📝' },
-    { value: 'call', label: '☎️ Call', icon: '☎️' },
-    { value: 'email', label: '📧 Email', icon: '📧' },
-    { value: 'meeting', label: '📅 Meeting', icon: '📅' },
+    { value: 'note', label: 'Note', Icon: FileText },
+    { value: 'call', label: 'Call', Icon: Phone },
+    { value: 'email', label: 'Email', Icon: EnvelopeOpen },
+    { value: 'meeting', label: 'Meeting', Icon: CalendarBlank },
 ];
 
 /**
@@ -173,15 +179,18 @@ export default function ActivityModal({
                                 key={type.value}
                                 type="button"
                                 onClick={() => setData('type', type.value)}
-                                className={`rounded-lg border-2 px-3 py-2 text-sm font-medium transition ${
+                                className={`inline-flex flex-col items-center gap-1.5 rounded-lg border-2 px-3 py-2 text-sm font-medium transition-all duration-150 ${
                                     data.type === type.value
-                                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                        : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+                                        ? 'border-blue-500 bg-blue-50 text-blue-700 scale-105'
+                                        : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:scale-105'
                                 }`}
                             >
-                                <span className="mr-1">{type.icon}</span>
-                                <span className="hidden sm:inline">
-                                    {type.label.split(' ')[1]}
+                                <type.Icon
+                                    size={22}
+                                    weight={data.type === type.value ? 'fill' : 'duotone'}
+                                />
+                                <span className="hidden sm:inline text-xs ">
+                                    {type.label}
                                 </span>
                             </button>
                         ))}

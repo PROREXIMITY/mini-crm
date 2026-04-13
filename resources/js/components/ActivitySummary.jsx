@@ -4,6 +4,8 @@
  * Displays count stats for each activity type
  * Shows: Notes | Calls | Emails | Meetings
  */
+import { FileText, Phone, EnvelopeOpen, CalendarBlank } from '@phosphor-icons/react';
+
 export default function ActivitySummary({ activities }) {
     // Flatten all activities from groups
     const allActivities = Object.values(activities).flat();
@@ -34,7 +36,7 @@ export default function ActivitySummary({ activities }) {
                 {/* Breakdown */}
                 <div className="flex flex-wrap gap-4">
                     <div className="flex items-center gap-2">
-                        <span className="text-lg">📝</span>
+                        <FileText size={18} weight="duotone" className="text-gray-600" />
                         <span className="text-xs font-medium text-gray-600">
                             Notes:{' '}
                             <span className="font-bold text-gray-900">
@@ -44,7 +46,7 @@ export default function ActivitySummary({ activities }) {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <span className="text-lg">☎️</span>
+                        <Phone size={18} weight="duotone" className="text-gray-600" />
                         <span className="text-xs font-medium text-gray-600">
                             Calls:{' '}
                             <span className="font-bold text-gray-900">
@@ -54,7 +56,7 @@ export default function ActivitySummary({ activities }) {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <span className="text-lg">📧</span>
+                        <EnvelopeOpen size={18} weight="duotone" className="text-gray-600" />
                         <span className="text-xs font-medium text-gray-600">
                             Emails:{' '}
                             <span className="font-bold text-gray-900">
@@ -64,7 +66,7 @@ export default function ActivitySummary({ activities }) {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <span className="text-lg">📅</span>
+                        <CalendarBlank size={18} weight="duotone" className="text-gray-600" />
                         <span className="text-xs font-medium text-gray-600">
                             Meetings:{' '}
                             <span className="font-bold text-gray-900">

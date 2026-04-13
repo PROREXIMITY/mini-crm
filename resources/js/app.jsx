@@ -3,6 +3,8 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { ToastProvider } from '@/components/ToastProvider';
+import LoadingOverlay from '@/components/LoadingOverlay';
 import '../css/app.css';
 import { initializeTheme } from '@/hooks/use-appearance';
 import { route } from 'ziggy-js';
@@ -22,7 +24,9 @@ createInertiaApp({
 
         root.render(
             <StrictMode>
+                <ToastProvider />
                 <TooltipProvider delayDuration={0}>
+                    <LoadingOverlay />
                     <App {...props} />
                 </TooltipProvider>
             </StrictMode>,

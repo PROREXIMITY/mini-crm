@@ -1,4 +1,12 @@
 import { useState } from 'react';
+import {
+    X,
+    EnvelopeOpen,
+    Phone,
+    Plus,
+    PencilSimple,
+    Trash,
+} from '@phosphor-icons/react';
 import ActivityModal from './ActivityModal';
 
 /**
@@ -57,21 +65,9 @@ export default function ContactHub({
                     </div>
                     <button
                         onClick={onClose}
-                        className="rounded-lg p-1 hover:bg-gray-100"
+                        className="rounded-lg p-2 transition hover:bg-gray-100"
                     >
-                        <svg
-                            className="h-6 w-6 text-gray-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
+                        <X size={24} weight="bold" className="text-gray-500" />
                     </button>
                 </div>
 
@@ -90,9 +86,10 @@ export default function ContactHub({
                                         <a
                                             key={email.id}
                                             href={`mailto:${email.email}`}
-                                            className="block text-sm text-indigo-600 hover:underline"
+                                            className="flex items-center gap-2 text-sm text-indigo-600 hover:underline transition"
                                         >
-                                            📧 {email.email}
+                                            <EnvelopeOpen size={18} weight="duotone" />
+                                            {email.email}
                                         </a>
                                     ))}
                                 </div>
@@ -114,9 +111,10 @@ export default function ContactHub({
                                         <a
                                             key={phone.id}
                                             href={`tel:${phone.phone}`}
-                                            className="block text-sm text-indigo-600 hover:underline"
+                                            className="flex items-center gap-2 text-sm text-indigo-600 hover:underline transition"
                                         >
-                                            ☎️ {phone.phone}
+                                            <Phone size={18} weight="duotone" />
+                                            {phone.phone}
                                         </a>
                                     ))}
                                 </div>
@@ -165,13 +163,13 @@ export default function ContactHub({
                     </div>
                 </div>
 
-                {/* Footer - Actions */}
                 <div className="border-t border-gray-200 bg-gray-50 px-6 py-4 space-y-2">
                     <button
                         onClick={() => setActivityModalOpen(true)}
-                        className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700"
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-indigo-700 hover:scale-105"
                     >
-                        ➕ Add Activity
+                        <Plus size={18} weight="bold" />
+                        Add Activity
                     </button>
 
                     <button
@@ -179,16 +177,18 @@ export default function ContactHub({
                             onEdit(contact);
                             onClose();
                         }}
-                        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 hover:scale-105"
                     >
-                        ✏️ Edit
+                        <PencilSimple size={18} weight="duotone" />
+                        Edit
                     </button>
 
                     <button
                         onClick={handleDeleteContact}
-                        className="w-full rounded-lg border border-red-300 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700 transition hover:bg-red-100"
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-red-300 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700 transition-all hover:bg-red-100 hover:scale-105"
                     >
-                        🗑️ Delete
+                        <Trash size={18} weight="duotone" />
+                        Delete
                     </button>
                 </div>
             </div>

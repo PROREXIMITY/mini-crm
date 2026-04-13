@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
-    protected $fillable = ['user_id', 'first_name', 'last_name', 'company'];
+    protected $fillable = ['user_id', 'first_name', 'last_name', 'company', 'is_favorite'];
     protected $table = 'contacts';
+    
+    protected $casts = [
+        'is_favorite' => 'boolean',
+    ];
 
     public function emails()
     {
